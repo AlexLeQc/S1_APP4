@@ -1,0 +1,89 @@
+int pgm_lire(char nom_fichier[], int matrice[MAX_HAUTEUR][MAX_LARGEUR], 
+             int *p_lignes, int *p_colonnes, 
+             int *p_maxval, struct MetaData *p_metadonnees)
+{
+	char magic_numb[3];
+	char verif[MAX_CHAINE];
+	char placement1[MAX_CHAINE];
+	char placement2[MAX_CHAINE];
+	char placement3[MAX_CHAINE];
+	FILE *flot_entree = NULL;
+	flot_entree = fopen(nom_fichier, "r");
+	if (flot_entree == NULL)
+	{
+		return ERREUR;
+	}
+	fgets(verif,MAX_CHAINE, flot_entree);
+	if (verif[0] == '#')
+	{
+		int position = 1;
+		for (int i=1 ; verif[i] != ';';i++)
+		{
+			placement1[i-1] = verif[i];
+			position++;
+			if (verif[i] == '\0')
+			{
+				return ERREUR_FORMAT;
+			}
+		}
+		position++;
+		strcpy(p_metadonnees->auteur,placement1);
+		for (int i=0 ; verif[position] != ';';i++)
+		{
+			placement2[i] = verif[position];
+			position++;
+			if (verif[i] == '\0')
+			{
+				return ERREUR_FORMAT;
+			}
+		}
+		position++;
+		strcpy(p_metadonnees->dateCreation,placement2);
+		for (int i=0 ; verif[position] != '\0';i++)
+		{
+			placement3[i] = verif[position];
+			position++;
+		}
+		strcpy(p_metadonnees->lieuCreation,placement3);
+		
+		fscanf(flot_entree,"%s", magic_numb);
+	}
+	else
+	{
+		magic_numb[0]=verif[0];
+		magic_numb[1]=verif[1];
+	}
+	if (magic_numb[0] != 'P')
+	{
+		return ERREUR_FORMAT;
+	}
+	if (magic_numb[1] != '2')
+	{
+		return ERREUR_FORMAT;
+	}
+	fscanf(flot_entree, "%d %d", p_colonnes, p_lignes);
+	if (*p_colonnes > MAX_LARGEUR || *p_lignes > MAX_HAUTEUR)
+	{
+		return ERREUR_TAILLE;
+	}
+	fscanf(flot_entree, "%d", p_maxval);
+	if (*p_maxval > MAX_VALEUR)
+	{
+		return ERREUR_FORMAT;
+	}
+	for (int i = 0; i < *p_lignes; i++)
+	{
+		for (int j = 0; j < *p_colonnes; j++)
+		{
+			fscanf(flot_entree,"%d",&matrice[i][j]);
+			if (matrice[i][j] > *p_maxval)
+			{
+				return ERREUR_FORMAT;
+			}
+		}
+	}
+	
+	if(flot_entree != NULL) fclose(flot_entree);
+
+    return OK;
+}

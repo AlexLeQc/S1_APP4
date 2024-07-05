@@ -1,0 +1,10 @@
+-------------------------------------------------------------------
+Bienvenue au systeme d'aide au choix d'un prenom pour votre enfant.
+ 1.	Lire le fichier de prenoms de garcons.
+ 2.	Lire le fichier de prenoms de filles.
+ 3.	Chercher un prenom.
+ 4.	Creer fichier rapport (Les 5 plus populaires).
+ 5.	Sortir.
+-------------------------------------------------------------------
+ 
+Veuillez entrer votre selection :
